@@ -1,0 +1,11 @@
+config.json
+konumlar.json
+gunluk.txt*
+boss_durum_*.json
+.gelistirici
+__pycache__/
+build/
+dist/
+*.yeni
+tiklanacaklar/_eski/
+MemoryReadTest.cpp

@@ -1,0 +1,41 @@
+﻿METIN BOTU - KULLANIM
+=====================
+
+Kurulum gerekmez. Python, Tesseract vs. hepsi paketin icinde.
+
+1) Zip'i bir klasore cikar (Masaustu olabilir). Zip'in icinden calistirma.
+2) MetinBotu.exe'ye cift tikla. Yonetici izni ister -> Evet.
+   (Oyun yonetici olarak calistigi icin bot da yonetici olmak zorunda.)
+3) "Oyun pencereleri" listesinden client'larini sec (Ctrl ile birden fazla).
+   Hangisi hangisi bilemiyorsan secip "Hangisi? (goster)" dugmesine bas.
+4) "Hedef tas adi" kutusuna tasin adini yaz, orn:  Korsan Metini
+   Lv.100 (2.Seviye) kismini yazma. Bos birakirsan tum metin taslarina gider.
+5) Calisma modu:
+   - Arka plan: oyun arkada kalabilir, birden fazla client ayni anda.
+   - On plan : oyun onde olmali, tek client.
+6) Ilk seferde tek client secip "Teshis"e bas. Gunluk'te
+   "Tespit tamam: X tas bulundu" gorursen hazirsin.
+7) "Secilileri baslat".   F12 = hepsini durdur,  F11 = duraklat/devam.
+
+EK OZELLIKLER
+- Her pencereye ayri tas: listede satira CIFT TIKLA, o client'in tas adini yaz.
+  Ozel hedefi olmayan client'lar ustteki genel "Hedef tas adi"na gider.
+- Ek gorsel tiklama (taslardan bagimsiz): "Ekrandan resim kes" ile bir buton/simge
+  kes, "Acik" isaretle. O resim ekranda gorununce tiklanir. Adinin sonuna
+  _sag yazarsan sag tik, _cift yazarsan cift tik. "Test" ile puanina bak,
+  "Esik"i puanin biraz altina ayarla.
+- Tas bulma: "Sadece OCR" (varsayilan) | "Resim + OCR" | "Sadece resim".
+  Resim icin "Ekrandan sablon kes" ile tasin ISIM YAZISINI kes.
+
+ONERILER
+- Oyunda zemin efektlerini ve tas parlamalarini kapat: yazilar cok daha iyi okunur.
+- Oyun penceresini simge durumuna KUCULTME (arka planda goruntu gelmez).
+- Arka plan modunda tiklama aninda imlec bir anlik tasin ustune gidip geri doner. Normal.
+- Can bari okunmuyorsa: tasa tikla, bar ekrandayken "Kalibrasyon" ac,
+  barin etrafina fareyle kutu ciz, 'h' sonra 's' bas.
+
+SORUN OLURSA
+- Antivirus MetinBotu.exe'yi silebilir/engelleyebilir (tiklama ve klavye kisayolu
+  kullanan programlara boyle davraniyorlar). Klasoru antivirus istisnasina ekle.
+- "yonetici degil!" yaziyorsa programi kapatip yonetici olarak ac.
+- Gunluk'teki son satirlari kopyalayip gonder.

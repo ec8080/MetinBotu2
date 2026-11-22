@@ -1,0 +1,351 @@
+{
+  "pencere": {
+    "baslik_icerir": "Carina2",
+    "pid": null,
+    "_aciklama": "Arayuz listesinde bu yaziyi iceren pencereler gosterilir."
+  },
+  "arama_bolgesi": {
+    "_aciklama": "Pencereye gore oran (0-1). Ust bar ve alt beceri cubugu disarida kalsin.",
+    "sol": 0.05,
+    "ust": 0.08,
+    "sag": 0.95,
+    "alt": 0.72
+  },
+  "isim_etiketi": {
+    "_aciklama": "Tas isminin ekranda nasil gorundugu. min/max yukseklik piksel cinsinden.",
+    "parlaklik_esigi": 185,
+    "max_doygunluk": 90,
+    "min_genislik": 30,
+    "max_genislik": 320,
+    "min_yukseklik": 7,
+    "max_yukseklik": 26,
+    "yatay_birlestirme": 15,
+    "min_kenar_yogunlugu": 20.0,
+    "_kenar_aciklama": "Yazi mi arka plan mi: gokyuzu/kar da parlak ve soluktur, farki DUZ olmasi. Olcum: gercek tas yazisi 48-68, gokyuzu 0-10. 0 = filtre kapali. Etiket bulunamazsa dusurun (10-15), gereksiz etiket cikiyorsa artirin (30)."
+  },
+  "ocr": {
+    "anahtar_kelimeler": [
+      "metin",
+      "metini",
+      "korsan metini",
+      "isin metini",
+      "korsan",
+      "metlni"
+    ],
+    "seviye_filtresi": null,
+    "buyutme": 3,
+    "dil": "tur+eng",
+    "tesseract_yolu": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+    "zorunlu": true,
+    "benzerlik_esigi": 0.72,
+    "_aciklama": "zorunlu=false -> OCR okuyamasa bile isim etiketi goren yere tiklar (Tesseract yoksa acil cozum).",
+    "mod": "kesin",
+    "is_parcacigi": 0,
+    "tekrar_okuma_suresi": 4.0,
+    "belirsiz_tekrar_suresi": 0.8,
+    "_mod_aciklama": "mod: 'kesin' = sadece OCR ile metin okunan etiketler | 'oncelik' = OCR okuyamadigi etiketler de denenir (dusuk oncelik, can bari dogrular)",
+    "hedef_isimler": [],
+    "_hedef_isimler_aciklama": "Arayuzdeki 'Hedef tas adi'. Bos = anahtar_kelimeler ile tum metin taslari. Ornek: [\"Ahmet Metini\"]",
+    "isim_benzerlik_esigi": 0.75
+  },
+  "tespit": {
+    "_aciklama": "Tas nasil bulunsun. 'ocr' = yaziyi okuyarak (eski) | 'sablon' = sadece resimle (en hizli) | 'ikisi' = once resim, resmin bulamadiklari icin OCR (onerilen). Resimler 'sablonlar' klasorunde; arayuzde 'Ekrandan sablon kes' ile eklenir.",
+    "yontem": "ocr",
+    "sablon_klasoru": "sablonlar",
+    "esik": 0.62,
+    "dogrulama_esigi": 0.3,
+    "olcekler": [
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0,
+      1.05,
+      1.1,
+      1.15,
+      1.2
+    ],
+    "max_sonuc": 25,
+    "_esik_aciklama": "esik: yazi benzerligi (0-1). Yanlis yere tikliyorsa yukselt (0.70), tas kaciriyorsa dusur (0.55). 'Sablon testi' dugmesi her bulgunun puanini gosterir. olcekler: yazi uzaklikla kuculdugu icin denenen boyutlar."
+  },
+  "ek_tiklama": {
+    "_aciklama": "Taslardan BAGIMSIZ: 'tiklanacaklar' klasorundeki resimler ekranda gorununce tiklanir (buton, pencere, simge). Dosya adi '_sag' ile biterse sag tik, '_cift' ile biterse cift tik.",
+    "aktif": false,
+    "klasor": "tiklanacaklar",
+    "esik": 0.85,
+    "tiklama_oncesi_bekleme": 2.0,
+    "kontrol_araligi": 0.5,
+    "ayni_resim_bekleme": 3.0,
+    "tiklama_sonrasi_bekleme": 0.3,
+    "_esik_aciklama": "esik: benzerlik (0-1). Bulmuyorsa 0.8'e dusur, yanlis yere tikliyorsa 0.9'a cikar. ayni_resim_bekleme: ayni resme tekrar tiklamadan once beklenen saniye.",
+    "_bekleme_aciklama": "tiklama_oncesi_bekleme: resim goruldukten sonra kac sn beklensin. Sure dolunca resim hala ekrandaysa (yeni yerinde) tiklanir, kaybolduysa tiklanmaz. 0 = hemen tikla.",
+    "insansi": true,
+    "hover_bekleme": [
+      0.18,
+      0.35
+    ],
+    "basili_tutma": [
+      0.07,
+      0.14
+    ],
+    "tik_sonrasi_bekleme": [
+      0.12,
+      0.25
+    ],
+    "imleci_geri_getir": true,
+    "gercek_tiklama": false,
+    "_insansi_aciklama": "insansi: imlec egri yolla hedefe gider, ustunde biraz bekleyip kipirdar (hover), tus insan gibi basili tutulur. Hala bosa gidiyorsa hover_bekleme'yi [0.3, 0.5] yap. gercek_tiklama=true: arka plan modunda bile oyun penceresi one getirilip GERCEK fare tiklamasi yapilir (en garantisi).",
+    "konum_ogren": true,
+    "bolge_payi": 40,
+    "bolge_toleransi": 0.1,
+    "merkez_esik": 0.55,
+    "_netlik_aciklama": "konum_ogren: resmin bulundugu yer ogrenilir, once orada aranir (bolge_payi px cevresi), orada esik bolge_toleransi kadar esnek. merkez_esik: resmin ortasindaki yazi/rakam ayrica kontrol edilir."
+  },
+  "isin": {
+    "_aciklama": "kullan=false (varsayilan): tiklama zamanlayicisi kullanilir, tasin kendi parlamasi yanlis pozitif vermez. Mavi isin ayrimi isterseniz kalibrasyonda 'b' ile rengi ornekleyip true yapin.",
+    "kutu_ofset_y": 10,
+    "kutu_yukseklik": 120,
+    "kutu_genislik_carpani": 1.2,
+    "hsv_alt": [
+      80,
+      80,
+      100
+    ],
+    "hsv_ust": [
+      135,
+      255,
+      255
+    ],
+    "min_oran": 0.035,
+    "kullan": false
+  },
+  "tiklama": {
+    "_aciklama": "Sureler icin bkz. zamanlayici bolumu.",
+    "max_aktif_tas": 1,
+    "hedef_ofset_y": 60
+  },
+  "kamera": {
+    "cevirme_tusu": "e",
+    "_aciklama": "aktif=false: bot E ile kamerayi HIC cevirmez (tas bulunamayinca ve takilinca).",
+    "aktif": false
+  },
+  "guvenlik": {
+    "durdurma_tusu": "f12",
+    "duraklat_tusu": "f11",
+    "pencere_odakta_degilse_bekle": true,
+    "insansi_fare": true
+  },
+  "gunluk": {
+    "seviye": "INFO",
+    "kare_kaydet": false,
+    "kare_klasoru": "debug"
+  },
+  "otomatik_olcek": true,
+  "referans_yukseklik": 1080,
+  "_aciklama": "Piksel degerleri 1920x1080 referansina gore. otomatik_olcek=true ise pencere boyutuna gore kendiliginden uyarlanir.",
+  "hedef_bari": {
+    "_aciklama": "Hedefe tiklayinca ekranin ustunde cikan can bari. Tas kirildi mi karari bunun. yuzde_zorunlu=true: can/yuzde okunmadan 'bar var' denmez, boylece tasin havada duran ismi bar sanilmaz. Bolgeyi kalibrasyonda 'h' ile secin.",
+    "kullan": true,
+    "bolge": {
+      "sol": 0.3,
+      "ust": 0.015,
+      "sag": 0.74,
+      "alt": 0.075
+    },
+    "yuzde_okuma": "ocr",
+    "buyutme": 2,
+    "bos_esigi_yuzde": 1.0,
+    "ocr_basarisizsa_dolgu": true,
+    "dolgu_hsv_alt": [
+      0,
+      90,
+      90
+    ],
+    "dolgu_hsv_ust": [
+      12,
+      255,
+      255
+    ],
+    "yuzde_zorunlu": true,
+    "dolgu_hasar_sayilsin": true,
+    "dolgu_hasar_esigi": 2.0
+  },
+  "zamanlayici": {
+    "_aciklama": "Tum sureler saniye. [a, b] yazan yerlerde a-b arasi rastgele beklenir. kirilma_onay_kare: bar kac tarama ust uste yoksa tas kirildi sayilir.",
+    "tiklama_sonrasi_bekleme": [
+      0.25,
+      0.45
+    ],
+    "hedef_bari_cikma_suresi": 2.5,
+    "tas_kesme_zaman_asimi": 90.0,
+    "tas_kirildi_sonrasi_bekleme": [
+      0.1,
+      0.25
+    ],
+    "ayni_tasa_tekrar_tiklama_bekleme": 5.0,
+    "dongu_araligi": 0.12,
+    "kamera_cevirme_esigi": 6.0,
+    "kamera_cevirme_basili_tutma": [
+      0.35,
+      0.6
+    ],
+    "hedef_kaybolma_toleransi": 1.5,
+    "can_degismeme_suresi": 10.0,
+    "takilan_tas_bekleme": 30.0,
+    "kurtulma_sonrasi_bekleme": [
+      0.6,
+      1.0
+    ],
+    "kesme_sirasinda_tarama_araligi": 1.0,
+    "kirilma_onay_kare": 2,
+    "hedef_degisim_bekleme": 1.2,
+    "yanlis_hedef_bekleme": 20.0
+  },
+  "secim": {
+    "_aciklama": "Hangi tas secilsin. Metin2'de isim yazisi uzaklikla kuculur -> buyuk etiket = yakin tas. yontem: 'en_yakin' (en buyuk etiket), 'ekran_ortasi', 'karisik'",
+    "yontem": "karisik",
+    "boyut_agirligi": 0.65,
+    "min_etiket_yuksekligi": 0,
+    "hizli_gecis": true,
+    "_hizli_aciklama": "hizli_gecis: tas kirilinca bir sonraki donguyu beklemeden taze kareyle siradaki tasa hemen tiklar."
+  },
+  "kurtulma": {
+    "_aciklama": "Taşa giderken yol kapanirsa. kamera_cevir: E ile aci degistirir. engeli_hedefle: yolu kapatan (en yakin) tasa gecer - varsayilan ve en etkilisi.",
+    "engeli_hedefle": true,
+    "kamera_cevir": true,
+    "tus": ""
+  },
+  "girdi": {
+    "_aciklama": "mod: 'on_plan' (gercek fare, oyun onde olmali) | 'arka_plan' (deneysel: pencereye mesaj gonderir, oyun arkada kalabilir)",
+    "mod": "on_plan",
+    "yakalama": "otomatik",
+    "_yakalama_aciklama": "Arka plan goruntusu: 'otomatik'/'wgc' = Windows Graphics Capture (pip install windows-capture), 'printwindow' = eski yontem",
+    "arka_imlec": true,
+    "_arka_imlec_aciklama": "arka plan tiklamasinda imlec bir anlik hedefe gidip geri doner (Metin2 tiklamayi gercek imlec yerinden alir)",
+    "arka_tus_yontemi": "mesaj",
+    "_tus_yontemi_aciklama": "Arka planda tus (pelerin vb.) basma: 'mesaj' | 'mesaj_char' | 'one_getir' (pencere bir anlik one gelir, gercek tus). Kontrol sekmesinde 'Tus testi' ile dene."
+  },
+  "boss": {
+    "_aciklama": "Isinlanma Sihirbazi (TAB) uzerinden boss cagirma. Ayarlar boss_kalibrasyon.py ile yapilir.",
+    "aktif": false,
+    "periyot_dakika": 120,
+    "liste": [],
+    "_liste_aciklama": "Her boss kendi bekleme suresiyle: [{\"ad\":\"Mavi Ejderha Odasi\",\"dakika\":30}]. Duz metin de kabul edilir, o zaman periyot_dakika kullanilir.",
+    "panel_tusu": "tab",
+    "panel_acilma_bekleme": 5.0,
+    "panel_kapanma_bekleme": 0.8,
+    "panel_bolgesi": null,
+    "logo": {
+      "dosya": "boss_logo.png",
+      "esik": 0.93,
+      "sutun_x": null,
+      "sutun_tolerans": 25,
+      "_aciklama": "Cagirma butonunun sablonu. esik dusurulurse yandaki benzer butonlar da yakalanabilir.",
+      "dosyalar": [
+        "boss_logo.png"
+      ],
+      "_dosyalar_aciklama": "Birden fazla cagirma butonu gorunumu varsa hepsi burada. boss_kalibrasyon.py'de '2' tusu ikincisini ekler."
+    },
+    "isim": {
+      "sol_ofset": 450,
+      "sag_ofset": 250,
+      "dikey_pay": 4,
+      "buyutme": 3,
+      "benzerlik_esigi": 0.8,
+      "_aciklama": "Isim hucresi logonun solunda: logo_x-sol_ofset ile logo_x-sag_ofset arasi.",
+      "zayif_kelime_esigi": 0.8,
+      "ayirt_farki": 0.1,
+      "_eslesme_aciklama": "benzerlik_esigi: hedefin kelimelerinin ortalama puani. zayif_kelime_esigi: hedefin EN KOTU eslesen kelimesi bunun altindaysa satir reddedilir (Mavi/Altin/Kirmizi Ejderha karismasin diye). ayirt_farki: en iyi ile ikinci satir bu kadar ayrilmiyorsa tiklanmaz."
+    },
+    "kaydirma": {
+      "tik": 1,
+      "max_adim": 8,
+      "adim_bekleme": [
+        0.35,
+        0.6
+      ],
+      "yukari_sifirla": true,
+      "_aciklama": "Fare tekerlegi. tik=1 -> her adimda TEK cevrim: satirlar ust uste biner, aradaki satir atlanmaz (2 cevrimde satirlar kesiliyordu). max_adim sadece ust sinir; liste degismeyi birakinca arama zaten durur.",
+      "son_esigi": 1
+    },
+    "zamanlayici": {
+      "cagirma_sonrasi_space_gecikmesi": 0.6,
+      "space_basili_tutma": 2.0,
+      "bosslar_arasi_bekleme": 15.0,
+      "kapatma_oncesi_bekleme": 1.0,
+      "yonler_arasi_bekleme": 0.15
+    },
+    "_periyot_aciklama": "Suresi yazilmayan bosslar icin varsayilan bekleme (dakika).",
+    "tekrar_deneme_dakika": 5,
+    "_tekrar_aciklama": "Bulunamayan boss: ilk 5 dk, sonra 10, 20, 40, en fazla max_tekrar_deneme_dakika. yalniz_deneme_limiti kadar ust uste bulunamazsa artik TEK BASINA tur baslatmaz, sadece baska boss icin panel acikken denenir. 0 = kapali.",
+    "turlar_arasi_en_az_dakika": 1,
+    "max_tekrar_deneme_dakika": 60,
+    "yalniz_deneme_limiti": 2,
+    "genel_tur_dakika": 120,
+    "_genel_tur_aciklama": "Bossa ozel surelerden BAGIMSIZ: bu kadar dakikada bir listedeki TUM bosslar denenir (suresi dolmamis olsa bile). 0 = kapali.",
+    "debug_kare": true,
+    "saldiri_yonleri": [
+      "a",
+      "w",
+      "d",
+      "s"
+    ],
+    "tur_sonrasi_bar_yoksay": 4.0,
+    "_bar_yoksay_aciklama": "Boss'a vururken SPACE yakindaki metne de degebiliyor; ekranda o metnin can bari asili kaliyor. Turdan sonra bu kadar saniye bar yok sayilir, bot kendi tasini kendi secer.",
+    "cagirma_nesnesi": {
+      "aktif": false,
+      "_aciklama": "Bossu kendi uzerine ceken nesne. Her basarili cagirmadan sonra, SPACE saldirisindan ONCE bu noktaya 1 kez SAG tiklanir. x/y pencere orani; boss_kalibrasyon.py'de 'n' tusu ile secilir.",
+      "x": 0.5,
+      "y": 0.92,
+      "sapma": 3,
+      "oncesi_bekleme": 0.3,
+      "sonrasi_bekleme": 0.8
+    }
+  },
+  "cekme_vurma": {
+    "_aciklama": "At ustu cekme vurma: SPACE surekli basili, pelerin tusu araliklarla basilir. Metin kesmeden ayri calisir.",
+    "pelerin_tusu": "4",
+    "pelerin_araligi": 5.0,
+    "pelerin_oynama": 0.6,
+    "space_tekrar": 0.1,
+    "kontrol_araligi": 0.5,
+    "on_plan": true,
+    "_on_plan_aciklama": "on_plan=true: oyun penceresi one getirilir, gercek klavye (coklu client'ta sirayla). false: ARKA PLAN, tuslar pencereye mesajla gider, her client ayri ve ayni anda calisir (oyun mesaji kabul etmezse vurmaz). Arayuzden secilir.",
+    "sirali_tur_suresi": 2.0,
+    "sirali_tur_pelerin": 3,
+    "sirali_gecis_bekleme": 0.25,
+    "_sirali_aciklama": "Birden fazla client secilince: client'lar sirayla one gelir, her birinde sirali_tur_suresi sn kalinir ve sirali_tur_pelerin kez pelerin basilir; SPACE basiliyken siradakine gecilir (arkadakiler vurmaya devam eder).",
+    "tiklarken_space_birak": false,
+    "_space_birak_aciklama": "tiklarken_space_birak: true = ek gorsele/olum butonuna tiklarken SPACE kisa sure birakilir (tik bosa gidiyorsa ac). false = SPACE hic birakilmaz.",
+    "arka_tus_yontemi": "guclu",
+    "_arka_tus_aciklama": "Arka planda pelerin/ctrl+g basma yontemi. guclu = 'aktifsin' mesajlari + 0.3 sn basili + 3 kez bas-birak (testte 1-2-3 calisti). mesaj | mesaj_char | one_getir de olur.",
+    "pelerin_basili_sure": 1.0,
+    "_basili_aciklama": "pelerin_basili_sure: ARKA PLANDA pelerin tusu bu kadar sn basili tutulur (kisa basis oyuna gitmiyor). Aralik bundan kisaysa aralik-0.1 sn kullanilir.",
+    "pelerin_yontemi": "7",
+    "_yontem_aciklama": "pelerin_yontemi: arka planda pelerin nasil gonderilsin (1-8, SpaceTesti numaralari). Arayuzden secilir.",
+    "pelerin_ayri_islem": true,
+    "pelerinde_space_kisa_birak": true
+  },
+  "olum_kontrol": {
+    "_aciklama": "Olunce cikan resim ('olum' klasoru, orn. 'Burada yeniden basla' butonu) gorulunce: davranis 'tikla' = o resme tikla ve devam et, 'durdur' = o client'i durdur.",
+    "aktif": true,
+    "klasor": "olum",
+    "esik": 0.9,
+    "davranis": "tikla",
+    "tiklama_oncesi_bekleme": 10.0,
+    "dirilme_sonrasi_bekleme": 0.5,
+    "dirilince_basilacak_tuslar": [
+      "ctrl+g"
+    ],
+    "_esik_aciklama": "esik 0.90: 'Sehirde yeniden basla' butonu 0.81 puan aliyor, ona tiklanmasin diye esik bunun ustunde tutuldu.",
+    "tus_sonrasi_bekleme": 2.5,
+    "_tus_aciklama": "dirilince_basilacak_tuslar: yeniden baslayinca sirayla basilir. Kombinasyon '+' ile: 'ctrl+g' = ata bin. tus_sonrasi_bekleme: her tustan sonra beklenen sn (ata binme animasyonu).",
+    "_sira_aciklama": "Olunce: SPACE birakilir -> tiklama_oncesi_bekleme (10 sn) -> 'Burada yeniden basla' -> dirilme_sonrasi_bekleme (0.5 sn) -> dirilince_basilacak_tuslar (ctrl+g) -> tus_sonrasi_bekleme (2.5 sn) -> SPACE. Coklu client'ta olen client beklerken digerleri devam eder."
+  },
+  "metin_pelerin": {
+    "_aciklama": "Metin kesme sirasinda pelerin basilsin mi (Kontrol sekmesinde tik).",
+    "aktif": false,
+    "tus": "4",
+    "aralik": 5.0
+  }
+}
