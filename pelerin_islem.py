@@ -35,7 +35,7 @@ def calis(hwnd, tus, yontem, aralik_deger, sure_deger, dur, bekle, sayac,
             aralik = max(0.3, float(aralik_deger.value))
             sure = max(0.05, min(float(sure_deger.value), aralik - 0.1))
             try:
-                if space_ara is not None:
+                if space_ara is not None and str(yontem) != "9":
                     # Arka planda SPACE basiliyken oyun F1'i almiyor:
                     # SPACE'i cok kisa birak -> F1 -> SPACE'e yeniden bas.
                     space_ara.set()

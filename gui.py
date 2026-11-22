@@ -565,6 +565,27 @@ class Arayuz:
         ttk.Button(st, text="Konum sec", command=self._sag_konum_sec).pack(side="left", padx=(8, 4))
         self.cv_sag_etiket.pack(side="left")
 
+        # --- arka planda pelerini fareyle kullan (F1 arkada oyuna gitmiyor) ---
+        pf = ttk.Frame(ay)
+        pf.grid(row=8, column=0, columnspan=5, sticky="w", pady=(6, 0))
+        self.cv_pt_aktif = tk.BooleanVar(value=bool(c.get("pelerin_tik_aktif", False)))
+        ttk.Checkbutton(pf, text="Arka planda pelerini FAREYLE kullan (F1 yerine kutuya tikla)",
+                        variable=self.cv_pt_aktif, command=self.cekme_uygula).pack(side="left")
+        self.cv_pt_tur = tk.StringVar(value="Sag tik" if c.get("pelerin_tik_tur") == "sag"
+                                      else "Sol tik")
+        ptt = ttk.Combobox(pf, textvariable=self.cv_pt_tur, values=["Sol tik", "Sag tik"],
+                           state="readonly", width=7)
+        ptt.pack(side="left", padx=6)
+        ptt.bind("<<ComboboxSelected>>", lambda e: self.cekme_uygula())
+        self.cv_pt_imlec = tk.BooleanVar(value=bool(c.get("pelerin_tik_imlec", False)))
+        ttk.Checkbutton(pf, text="imlec gidip gelsin", variable=self.cv_pt_imlec,
+                        command=self.cekme_uygula).pack(side="left", padx=(0, 4))
+        self.cv_pt_xy = (c.get("pelerin_tik_x"), c.get("pelerin_tik_y"))
+        self.cv_pt_etiket = ttk.Label(pf, foreground="#666", text=self._xy_yazi(self.cv_pt_xy))
+        ttk.Button(pf, text="Konum sec", command=lambda: self._konum_sec(
+            self.cv_pt_etiket, "cv_pt_xy", "Pelerin kutusu")).pack(side="left", padx=(4, 4))
+        self.cv_pt_etiket.pack(side="left")
+
         ttk.Label(ay, text="Coklu client:", font=("Segoe UI", 9, "bold")).grid(
             row=1, column=0, sticky="w", pady=(8, 0))
         ttk.Label(ay, text="her client'ta kal (sn):").grid(row=1, column=1, sticky="w", pady=(8, 0))
@@ -661,6 +682,13 @@ class Arayuz:
                 c["pelerin_basili_sure"] = max(0.2, float(self.cv_basili.get().replace(",", ".")))
             except ValueError:
                 pass
+        if hasattr(self, "cv_pt_aktif"):
+            c["pelerin_tik_aktif"] = bool(self.cv_pt_aktif.get())
+            c["pelerin_tik_tur"] = "sag" if self.cv_pt_tur.get() == "Sag tik" else "sol"
+            c["pelerin_tik_imlec"] = bool(self.cv_pt_imlec.get())
+            x, y = self.cv_pt_xy
+            if x is not None and y is not None:
+                c["pelerin_tik_x"], c["pelerin_tik_y"] = int(x), int(y)
         if hasattr(self, "cv_sag_aktif"):
             c["sag_tik_aktif"] = bool(self.cv_sag_aktif.get())
             try:
@@ -699,25 +727,34 @@ class Arayuz:
             return "konum secilmedi"
         return "pencere icinde x=%d, y=%d" % (x, y)
 
-    def _sag_konum_sec(self, kalan=3):
+    def _xy_yazi(self, xy):
+        x, y = xy
+        if x is None or y is None:
+            return "konum secilmedi"
+        return "pencere icinde x=%d, y=%d" % (x, y)
+
+    def _sag_konum_sec(self):
+        self._konum_sec(self.cv_sag_etiket, "cv_sag_xy", "Sag tik")
+
+    def _konum_sec(self, etiket, alan, ad, kalan=3):
         """3 sn geri sayim: fareyi oyunda istenen yere goturun, konum alinir."""
         if kalan > 0:
-            self.cv_sag_etiket.config(text="Fareyi oyunda tiklanacak yere goturun... %d" % kalan)
-            self.kok.after(1000, lambda: self._sag_konum_sec(kalan - 1))
+            etiket.config(text="Fareyi oyunda o yere goturun... %d" % kalan)
+            self.kok.after(1000, lambda: self._konum_sec(etiket, alan, ad, kalan - 1))
             return
         try:
             import win32gui
             sx, sy = win32gui.GetCursorPos()
             h = win32gui.WindowFromPoint((sx, sy))
-            h = ctypes.windll.user32.GetAncestor(h, 2) or h     # GA_ROOT: ana pencere
+            h = ctypes.windll.user32.GetAncestor(h, 2) or h
             x, y = win32gui.ScreenToClient(h, (sx, sy))
         except Exception:
-            logging.exception("Sag tik konumu alinamadi")
-            self.cv_sag_etiket.config(text="konum alinamadi, tekrar deneyin")
+            logging.exception("%s konumu alinamadi", ad)
+            etiket.config(text="konum alinamadi, tekrar deneyin")
             return
-        self.cv_sag_xy = (int(x), int(y))
-        self.cv_sag_etiket.config(text=self._sag_konum_yazi())
-        logging.info("Sag tik konumu secildi: pencere icinde x=%d, y=%d", x, y)
+        setattr(self, alan, (int(x), int(y)))
+        etiket.config(text=self._xy_yazi((x, y)))
+        logging.info("%s konumu secildi: pencere icinde x=%d, y=%d", ad, x, y)
         self.cekme_uygula()
 
     def cekme_uygula(self):

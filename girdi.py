@@ -538,6 +538,35 @@ def yavas_tikla(hwnd, istemci_x, istemci_y, tur="sol", arka_plan=True, ayar=None
     return True
 
 
+def arka_tikla_sessiz(hwnd, istemci_x, istemci_y, sag=False):
+    """ARKA PLAN, fare oynamadan: sadece tik mesaji (fare-hareket mesaji yok;
+    oyun o mesajla gercek imleci kendine cekiyor). Oyun yine de imleci cekerse
+    imlec hemen kullanicinin biraktigi yere geri konur."""
+    if win32gui is None:
+        return False
+    lp = _lparam(int(istemci_x), int(istemci_y))
+    asagi, yukari, bayrak = ((WM_RBUTTONDOWN, WM_RBUTTONUP, MK_RBUTTON) if sag
+                             else (WM_LBUTTONDOWN, WM_LBUTTONUP, MK_LBUTTON))
+    try:
+        hx, hy = win32gui.ClientToScreen(hwnd, (int(istemci_x), int(istemci_y)))
+    except Exception:
+        hx = hy = None
+    eski = fare_konumu()
+    _post(hwnd, asagi, bayrak, lp)
+    time.sleep(random.uniform(0.04, 0.08))
+    _post(hwnd, yukari, 0, lp)
+    if hx is None:
+        return True
+    bitis = time.time() + 0.35
+    while time.time() < bitis:
+        # sadece oyun imleci TIK NOKTASINA cektiyse geri al (kullanici oynatirsa karisma)
+        x, y = fare_konumu()
+        if abs(x - hx) <= 3 and abs(y - hy) <= 3 and (x, y) != eski:
+            user32.SetCursorPos(int(eski[0]), int(eski[1]))
+        time.sleep(0.01)
+    return True
+
+
 def arka_sag_tikla(hwnd, istemci_x, istemci_y, imleci_tasi=True):
     """ARKA PLAN: pencereye sag tiklama mesaji gonderir. Metin2 tiklamayi
     gercek imlec yerinden alabildigi icin imlec bir anlik hedefe tasinir."""
@@ -679,6 +708,9 @@ PELERIN_YONTEMLERI = {
     "6": "6) Klavye durumu + 'aktifsin'",
     "7": "7) Surekli one al-birak (gercek tus, fareye dokunmaz)",
     "8": "8) Tek kisa basis",
+    "9": "9) Gercek klavye gibi (F1'den sonra SPACE tekrari yok)",
+    "10": "10) Odak sifirla + tek basis",
+    "11": "11) Gercek tus, oyunu ONE ALMADAN",
 }
 
 
@@ -776,7 +808,31 @@ def arka_pelerin(hwnd, tus, yontem="1", sure=1.0, dur_mu=None):
                 except Exception:
                     pass
 
-    if yontem == "8":
+    if yontem == "11":
+        # Oyun kisayollari 'tus su an basili mi' diye okuyorsa (mesaj degil)
+        # gercek tus arkadaki oyuna da gorunur. Pencere one alinmaz.
+        with IMLEC_KILIDI:
+            _gonder(_INPUT(1, _INPUTUNION(ki=_KEYBDINPUT(vk, kod, 0, 0, None))))
+            time.sleep(random.uniform(0.06, 0.1))
+            _gonder(_INPUT(1, _INPUTUNION(ki=_KEYBDINPUT(vk, kod, 0x0002, 0, None))))
+        return True
+
+    if yontem == "10":
+        # Oyun F1'i 'hala basili' sanip yeni basisi yok sayiyor olabilir:
+        # odak kaybet/kazan mesajlari oyunun kendi tus tablosunu sifirlar
+        # (alt-tab yapip geri donmek gibi), sonra tek kisa basis.
+        _post_test(hwnd, WM_KEYUP, vk, _lp(kod, yukari=True))
+        _post_test(hwnd, 0x0008, 0, 0)          # WM_KILLFOCUS
+        _post_test(hwnd, WM_ACTIVATE, 0, 0)
+        time.sleep(0.03)
+        aktif_kandir(hwnd)
+        time.sleep(0.04)
+        _post_test(hwnd, WM_KEYDOWN, vk, _lp(kod))
+        time.sleep(random.uniform(0.04, 0.08))
+        _post_test(hwnd, WM_KEYUP, vk, _lp(kod, yukari=True))
+        return True
+
+    if yontem in ("8", "9"):
         _post_test(hwnd, WM_KEYDOWN, vk, _lp(kod))
         time.sleep(random.uniform(0.04, 0.08))
         _post_test(hwnd, WM_KEYUP, vk, _lp(kod, yukari=True))

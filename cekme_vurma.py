@@ -125,6 +125,9 @@ class CekmeVurma:
         simdi = time.time()
         if simdi - self._son_space < float(self.a.get("space_tekrar", 0.1)):
             return
+        if (self.space_basili and self.girdi.arka_plan
+                and str(self.a.get("pelerin_yontemi")) == "9"):
+            return                             # gercek klavye gibi: tekrar yok, basili kalir
         ara = getattr(self, "_pi_space", None)
         if self._pel_islem is not None and ara is not None and ara.is_set():
             self._son_space = simdi            # F1 icin kisa SPACE araligi: bekle
@@ -246,7 +249,43 @@ class CekmeVurma:
             self._pi_bekle.clear()
         self.pelerin_sayisi = getattr(self, "_pi_taban", 0) + self._pi_sayac.value
 
+    def _pelerin_fareyle(self, simdi):
+        """ARKA PLAN: pelerin F1 yerine kisayol/envanter kutusuna tiklanarak kullanilir
+        (oyun arkadayken klavye kisayolunu almiyor, tiklamayi aliyor)."""
+        if simdi < self._sonraki_pelerin:
+            return
+        x, y = self.a.get("pelerin_tik_x"), self.a.get("pelerin_tik_y")
+        aralik = max(0.5, float(self.a.get("pelerin_araligi", 5.0)))
+        if x is None or y is None:
+            if simdi - self._son_bos_uyari > 10:
+                logging.error("Pelerin kutusunun konumu secilmedi ('Konum sec' ile secin)")
+                self._son_bos_uyari = simdi
+            self._sonraki_pelerin = simdi + 2
+            return
+        sag = self.a.get("pelerin_tik_tur", "sol") == "sag"
+        imlec = bool(self.a.get("pelerin_tik_imlec", False))   # False: fare hic oynamaz
+        try:
+            if not imlec:
+                girdi.arka_tikla_sessiz(self.hwnd, int(x), int(y), sag)
+            elif sag:
+                girdi.arka_sag_tikla(self.hwnd, int(x), int(y), True)
+            else:
+                girdi.arka_tikla(self.hwnd, int(x), int(y), True)
+            self.pelerin_sayisi += 1
+            if self.pelerin_sayisi <= 3:
+                logging.info("Pelerin fareyle: %s tik x=%d, y=%d (%s)", "sag" if sag else "sol",
+                             x, y, "imlec gidip gelir" if imlec else "fare oynamaz")
+        except Exception:
+            logging.exception("Pelerin kutusuna tiklanamadi")
+        oynama = min(max(0.0, float(self.a.get("pelerin_oynama", 0.6))), aralik * 0.1)
+        self._sonraki_pelerin = simdi + aralik + random.uniform(-oynama, oynama)
+
     def _pelerin(self, simdi):
+        if self.girdi.arka_plan and self.a.get("pelerin_tik_aktif"):
+            if self._pel_islem is not None:
+                self._islem_durdur()
+            self._pelerin_fareyle(simdi)
+            return
         if self._pel_islem is not None:
             return
         if simdi < self._sonraki_pelerin:
@@ -465,7 +504,8 @@ class CekmeVurma:
         self._yakalayici_kur()
         self.basla_zamani = time.time()
         bekci = _BirakanGirdi(self)
-        if self.girdi.arka_plan and self.a.get("pelerin_ayri_islem", True):
+        if (self.girdi.arka_plan and self.a.get("pelerin_ayri_islem", True)
+                and not self.a.get("pelerin_tik_aktif")):
             try:
                 self._islem_baslat()
             except Exception:

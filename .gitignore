@@ -9,3 +9,4 @@ dist/
 *.yeni
 tiklanacaklar/_eski/
 MemoryReadTest.cpp
+.tesseract_sorma
